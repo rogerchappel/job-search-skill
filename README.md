@@ -1,3 +1,48 @@
 # job-search-skill
 
-Open source repository scaffold.
+Reusable agent instructions for running a focused, evidence-backed job search.
+
+This repository is a lightweight skill package, not an application. Its value is
+the workflow text an agent can load when helping a job seeker research roles,
+adapt application materials, and track follow-up without inventing facts.
+
+## Usage
+
+Copy the skill instructions into the agent or skill system that supports local
+workflow files, then invoke it when a task is about job discovery, application
+triage, or outreach preparation.
+
+Example requests:
+
+```text
+Use the job-search skill to compare these three roles against my resume.
+Use the job-search skill to draft a recruiter follow-up based only on my notes.
+Use the job-search skill to build a weekly application tracker from these links.
+```
+
+When using the skill, provide the target role, resume or profile source, location
+constraints, seniority, salary constraints when relevant, and any companies or
+industries to avoid.
+
+## Workflow
+
+1. Confirm the search target and constraints.
+2. Extract evidence from user-provided materials before drafting.
+3. Separate verified facts from assumptions and open questions.
+4. Produce a role-fit summary, application checklist, and follow-up plan.
+5. Keep sensitive personal data out of public artifacts unless the user asks for
+   a specific shareable version.
+
+## Limitations
+
+- The skill does not apply to jobs, contact recruiters, or submit personal data
+  on its own.
+- Job listings change quickly; verify current posting details before making a
+  recommendation or drafting a final application.
+- It should not invent employment history, credentials, salary claims, work
+  authorization, or referrals.
+
+## Repository Status
+
+Early public scaffold. The next useful improvement is to add the actual
+`SKILL.md` workflow file plus fixtures that demonstrate a safe role-fit review.
