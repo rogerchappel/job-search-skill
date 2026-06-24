@@ -44,5 +44,6 @@ industries to avoid.
 
 ## Repository Status
 
-Early public scaffold. The next useful improvement is to add the actual
-`SKILL.md` workflow file plus fixtures that demonstrate a safe role-fit review.
+Early public skill package. The first workflow lives in [SKILL.md](SKILL.md).
+The next useful improvement is to add fixtures that demonstrate a safe role-fit
+review against a sample resume and job posting.
