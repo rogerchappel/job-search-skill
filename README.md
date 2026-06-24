@@ -1,29 +1,53 @@
 # job-search-skill
 
-Agent skill scaffold for job-search planning workflows.
+Reusable job search workflow skill scaffold for turning role targets, company
+research, outreach notes, and application follow-up into a repeatable process.
 
-## Quickstart
+## Usage
 
-```bash
+Use this repo as the public source for a job-search assistant skill. A typical
+consumer should be able to copy the workflow into an agent skill directory,
+customize the target-role inputs, and run the release check before sharing
+changes:
+
+```sh
 npm install
 npm run release:check
 ```
 
-## Usage
+Suggested skill inputs:
 
-Use this repository as the public home for a job-search agent skill. It should
-contain durable instructions, examples, and verification assets for workflows
-that turn job posts and candidate notes into reviewable application planning
-materials.
+- Target role title, level, and location constraints.
+- Company or role links to research.
+- Resume, portfolio, and outreach constraints supplied by the user.
+- Follow-up cadence and any explicit do-not-contact boundaries.
 
-When adding the actual skill content, keep the first public workflow local-first:
+## Workflow
 
-```bash
-npm run check
+1. Clarify the target role, location, and non-negotiable constraints.
+2. Research each company or posting from source material supplied by the user.
+3. Draft tailored application notes, outreach, or interview prep artifacts.
+4. Record follow-up dates and unresolved assumptions for the user to review.
+
+## Limitations
+
+- The workflow is advisory and must not invent employment history, credentials,
+  references, salary claims, or application status.
+- User-supplied resumes, contact details, and application materials are
+  sensitive and should not be committed to this repository.
+- Job listings and company details change frequently; refresh source material
+  before preparing final outreach or application copy.
+- This repository does not include a runnable job-board scraper, resume
+  rewriter, or application-submission agent.
+
+## Release check
+
+```sh
+npm run release:check
 ```
 
-The current check confirms that the README and package metadata expose the
-minimum public release surface expected by downstream automation.
+The check verifies that the README keeps usage, limitations, and release-check
+sections visible, and that package metadata points to this public repository.
 
 ## Release Checklist
 
@@ -31,12 +55,6 @@ minimum public release surface expected by downstream automation.
 - Document every external action as a human-approved step.
 - Run `npm run release:check` before opening a release-readiness PR.
 - Review `npm pack --dry-run` output before publishing any npm package.
-
-## Limitations
-
-This repository currently contains the public scaffold and release-readiness
-checks for the skill. It does not include a runnable job-board scraper, a resume
-rewriter, or an application-submission agent.
 
 ## Safety Notes
 

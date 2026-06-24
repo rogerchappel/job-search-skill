@@ -1,18 +1,19 @@
 {
   "name": "job-search-skill",
   "version": "0.1.0",
-  "description": "Agent skill scaffold for job-search planning workflows.",
+  "description": "Reusable job search workflow skill scaffold.",
+  "private": true,
   "type": "module",
   "scripts": {
-    "check": "node scripts/check.js",
+    "check": "node scripts/validate.mjs",
     "test": "npm run check",
     "release:check": "npm run check && npm pack --dry-run"
   },
   "keywords": [
-    "agent-skill",
     "job-search",
-    "career",
-    "workflow"
+    "skill",
+    "workflow",
+    "career"
   ],
   "author": "Roger Chappel",
   "license": "MIT",
@@ -24,10 +25,6 @@
     "url": "https://github.com/rogerchappel/job-search-skill/issues"
   },
   "homepage": "https://github.com/rogerchappel/job-search-skill#readme",
-  "files": [
-    "README.md",
-    "scripts"
-  ],
   "engines": {
     "node": ">=20"
   }
