@@ -1,0 +1,31 @@
+{
+  "name": "job-search-skill",
+  "version": "0.1.0",
+  "description": "Reusable job search workflow skill scaffold.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/validate.mjs",
+    "test": "npm run check",
+    "release:check": "npm test"
+  },
+  "keywords": [
+    "job-search",
+    "skill",
+    "workflow",
+    "career"
+  ],
+  "author": "Roger Chappel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerchappel/job-search-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerchappel/job-search-skill/issues"
+  },
+  "homepage": "https://github.com/rogerchappel/job-search-skill#readme",
+  "engines": {
+    "node": ">=20"
+  }
+}
