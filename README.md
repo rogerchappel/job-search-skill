@@ -8,9 +8,15 @@ adapt application materials, and track follow-up without inventing facts.
 
 ## Usage
 
-Copy the skill instructions into the agent or skill system that supports local
-workflow files, then invoke it when a task is about job discovery, application
-triage, or outreach preparation.
+Use this repo as the public source for a job-search assistant skill. A typical
+consumer should be able to copy the workflow into an agent skill directory,
+customize the target-role inputs, and run the release check before sharing
+changes:
+
+```sh
+npm install
+npm run release:check
+```
 
 Example requests:
 
@@ -41,6 +47,15 @@ industries to avoid.
   recommendation or drafting a final application.
 - It should not invent employment history, credentials, salary claims, work
   authorization, or referrals.
+
+## Release check
+
+```sh
+npm run release:check
+```
+
+The check verifies that the README keeps usage, limitations, and release-check
+sections visible, and that package metadata points to this public repository.
 
 ## Repository Status
 
