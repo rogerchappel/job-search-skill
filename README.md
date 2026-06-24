@@ -1,7 +1,10 @@
 # job-search-skill
 
-Reusable job search workflow skill scaffold for turning role targets, company
-research, outreach notes, and application follow-up into a repeatable process.
+Reusable agent instructions for running a focused, evidence-backed job search.
+
+This repository is a lightweight skill package, not an application. Its value is
+the workflow text an agent can load when helping a job seeker research roles,
+adapt application materials, and track follow-up without inventing facts.
 
 ## Usage
 
@@ -15,28 +18,35 @@ npm install
 npm run release:check
 ```
 
-Suggested skill inputs:
+Example requests:
 
-- Target role title, level, and location constraints.
-- Company or role links to research.
-- Resume, portfolio, and outreach constraints supplied by the user.
-- Follow-up cadence and any explicit do-not-contact boundaries.
+```text
+Use the job-search skill to compare these three roles against my resume.
+Use the job-search skill to draft a recruiter follow-up based only on my notes.
+Use the job-search skill to build a weekly application tracker from these links.
+```
+
+When using the skill, provide the target role, resume or profile source, location
+constraints, seniority, salary constraints when relevant, and any companies or
+industries to avoid.
 
 ## Workflow
 
-1. Clarify the target role, location, and non-negotiable constraints.
-2. Research each company or posting from source material supplied by the user.
-3. Draft tailored application notes, outreach, or interview prep artifacts.
-4. Record follow-up dates and unresolved assumptions for the user to review.
+1. Confirm the search target and constraints.
+2. Extract evidence from user-provided materials before drafting.
+3. Separate verified facts from assumptions and open questions.
+4. Produce a role-fit summary, application checklist, and follow-up plan.
+5. Keep sensitive personal data out of public artifacts unless the user asks for
+   a specific shareable version.
 
 ## Limitations
 
-- The workflow is advisory and must not invent employment history, credentials,
-  references, salary claims, or application status.
-- User-supplied resumes, contact details, and application materials are
-  sensitive and should not be committed to this repository.
-- Job listings and company details change frequently; refresh source material
-  before preparing final outreach or application copy.
+- The skill does not apply to jobs, contact recruiters, or submit personal data
+  on its own.
+- Job listings change quickly; verify current posting details before making a
+  recommendation or drafting a final application.
+- It should not invent employment history, credentials, salary claims, work
+  authorization, or referrals.
 
 ## Release check
 
@@ -46,3 +56,9 @@ npm run release:check
 
 The check verifies that the README keeps usage, limitations, and release-check
 sections visible, and that package metadata points to this public repository.
+
+## Repository Status
+
+Early public skill package. The first workflow lives in [SKILL.md](SKILL.md).
+The next useful improvement is to add fixtures that demonstrate a safe role-fit
+review against a sample resume and job posting.
