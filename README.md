@@ -41,12 +41,16 @@ industries to avoid.
 
 ## Limitations
 
+- The workflow is advisory and must not invent employment history, credentials,
+  references, salary claims, work authorization, referrals, or application status.
+- User-supplied resumes, contact details, and application materials are
+  sensitive and should not be committed to this repository.
+- Job listings and company details change frequently; refresh source material
+  before preparing final outreach or application copy.
 - The skill does not apply to jobs, contact recruiters, or submit personal data
   on its own.
-- Job listings change quickly; verify current posting details before making a
-  recommendation or drafting a final application.
-- It should not invent employment history, credentials, salary claims, work
-  authorization, or referrals.
+- This repository does not include a runnable job-board scraper, resume
+  rewriter, or application-submission agent.
 
 ## Release check
 
@@ -56,6 +60,20 @@ npm run release:check
 
 The check verifies that the README keeps usage, limitations, and release-check
 sections visible, and that package metadata points to this public repository.
+
+## Release Checklist
+
+- Keep examples based on synthetic job posts and candidate notes.
+- Document every external action as a human-approved step.
+- Run `npm run release:check` before opening a release-readiness PR.
+- Review `npm pack --dry-run` output before publishing any npm package.
+
+## Safety Notes
+
+Do not store private resumes, recruiter messages, job-board credentials, or live
+candidate contact details in this repository. Any workflow built here should
+produce reviewable drafts and require human approval before sending messages,
+submitting applications, or saving data to third-party services.
 
 ## Repository Status
 

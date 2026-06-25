@@ -7,7 +7,7 @@
   "scripts": {
     "check": "node scripts/validate.mjs",
     "test": "npm run check",
-    "release:check": "npm test"
+    "release:check": "npm run check && npm pack --dry-run"
   },
   "keywords": [
     "job-search",
