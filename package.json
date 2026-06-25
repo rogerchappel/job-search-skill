@@ -27,5 +27,11 @@
   "homepage": "https://github.com/rogerchappel/job-search-skill#readme",
   "engines": {
     "node": ">=20"
-  }
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "scripts",
+    "LICENSE"
+  ]
 }
