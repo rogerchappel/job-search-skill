@@ -30,6 +30,18 @@ When using the skill, provide the target role, resume or profile source, locatio
 constraints, seniority, salary constraints when relevant, and any companies or
 industries to avoid.
 
+## Fixture-backed role fit
+
+Run a safe role-fit exercise against the synthetic fixtures:
+
+```sh
+cat fixtures/sample-resume.md
+cat fixtures/sample-job-posting.md
+```
+
+Use `docs/role-fit-brief-template.md` to keep requirement matches, gaps,
+tailoring notes, and open questions separate.
+
 ## Workflow
 
 1. Confirm the search target and constraints.
@@ -59,14 +71,16 @@ npm run release:check
 ```
 
 The check verifies that the README keeps usage, limitations, and release-check
-sections visible, and that package metadata points to this public repository.
+sections visible, package metadata points to this public repository, synthetic
+fixtures are present, and `npm pack --dry-run` includes the expected skill,
+fixture, docs, and support files.
 
 ## Release Checklist
 
 - Keep examples based on synthetic job posts and candidate notes.
 - Document every external action as a human-approved step.
 - Run `npm run release:check` before opening a release-readiness PR.
-- Review `npm pack --dry-run` output before publishing any npm package.
+- Review `npm run package:smoke` output before publishing any npm package.
 
 ## Safety Notes
 
@@ -77,6 +91,5 @@ submitting applications, or saving data to third-party services.
 
 ## Repository Status
 
-Early public skill package. The first workflow lives in [SKILL.md](SKILL.md).
-The next useful improvement is to add fixtures that demonstrate a safe role-fit
-review against a sample resume and job posting.
+Early public skill package. The first workflow lives in [SKILL.md](SKILL.md),
+with synthetic role-fit fixtures under `fixtures/`.
