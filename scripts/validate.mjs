@@ -4,6 +4,8 @@ const requiredFiles = [
   'README.md',
   'SKILL.md',
   'LICENSE',
+  'SECURITY.md',
+  'CHANGELOG.md',
   'fixtures/sample-resume.md',
   'fixtures/sample-job-posting.md',
   'docs/role-fit-brief-template.md'

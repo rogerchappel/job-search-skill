@@ -35,6 +35,8 @@
     "scripts",
     "fixtures",
     "docs",
-    "LICENSE"
+    "LICENSE",
+    "SECURITY.md",
+    "CHANGELOG.md"
   ]
 }

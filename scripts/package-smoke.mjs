@@ -12,6 +12,8 @@ const required = [
   'SKILL.md',
   'README.md',
   'LICENSE',
+  'SECURITY.md',
+  'CHANGELOG.md',
   'scripts/validate.mjs',
   'scripts/package-smoke.mjs',
   'fixtures/sample-resume.md',
