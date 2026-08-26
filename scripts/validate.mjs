@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const requiredFiles = [
   'README.md',
@@ -16,6 +17,16 @@ const requiredReadmePhrases = [
   '## Usage',
   '## Limitations',
   '## Release check'
+];
+
+// Local artifacts that must never be committed; matches .gitignore exactly.
+const untrackedArtifactPatterns = [
+  /(^|\/)node_modules(\/|$)/,
+  /(^|\/)package-lock\.json$/,
+  /(^|\/)coverage(\/|$)/,
+  /(^|\/)dist(\/|$)/,
+  /\.log$/,
+  /(^|\/)\.DS_Store$/
 ];
 
 const readme = fs.readFileSync('README.md', 'utf8');
@@ -46,6 +57,26 @@ if (pkg.repository?.url !== 'git+https://github.com/rogerchappel/job-search-skil
 }
 if (!pkg.scripts?.['release:check']) errors.push('package.json missing release:check script');
 if (!pkg.scripts?.['package:smoke']) errors.push('package.json missing package:smoke script');
+
+const inWorkTree = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], { encoding: 'utf8' });
+if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true') {
+  const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
+  if (status.status !== 0) {
+    errors.push('git status --porcelain failed; install-artifact hygiene cannot be verified');
+  } else {
+    const untrackedArtifacts = String(status.stdout || '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => line.slice(3))
+      .filter((path) => untrackedArtifactPatterns.some((pattern) => pattern.test(path)));
+    if (untrackedArtifacts.length) {
+      errors.push(`install artifacts are untracked; add them to .gitignore or commit them deliberately: ${untrackedArtifacts.join(', ')}`);
+    }
+  }
+} else {
+  console.log('Not inside a git work tree; skipping untracked-artifact hygiene check.');
+}
 
 if (errors.length) {
   console.error(errors.map((error) => `- ${error}`).join('\n'));
