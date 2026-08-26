@@ -73,7 +73,9 @@ npm run release:check
 The check verifies that the README keeps usage, limitations, and release-check
 sections visible, package metadata points to this public repository, synthetic
 fixtures are present, and `npm pack --dry-run` includes the expected skill,
-fixture, docs, and support files.
+fixture, docs, and support files. It also fails when local install artifacts
+(`node_modules/`, `package-lock.json`, `coverage/`, `dist/`, `*.log`, `.DS_Store`)
+are left untracked, so generated files cannot slip into a commit.
 
 ## Release Checklist
 
