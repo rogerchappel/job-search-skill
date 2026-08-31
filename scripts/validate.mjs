@@ -60,7 +60,7 @@ if (!pkg.scripts?.['package:smoke']) errors.push('package.json missing package:s
 
 const inWorkTree = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], { encoding: 'utf8' });
 if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true') {
-  const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
+  const status = spawnSync('git', ['status', '--porcelain', '--ignored', '--untracked-files=all'], { encoding: 'utf8' });
   if (status.status !== 0) {
     errors.push('git status --porcelain failed; install-artifact hygiene cannot be verified');
   } else {
@@ -68,10 +68,11 @@ if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true'
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
+      .filter((line) => line.startsWith('?? ') || line.startsWith('!! '))
       .map((line) => line.slice(3))
       .filter((path) => untrackedArtifactPatterns.some((pattern) => pattern.test(path)));
     if (untrackedArtifacts.length) {
-      errors.push(`install artifacts are untracked; add them to .gitignore or commit them deliberately: ${untrackedArtifacts.join(', ')}`);
+      errors.push(`prohibited local artifacts are present: ${untrackedArtifacts.join(', ')}`);
     }
   }
 } else {
