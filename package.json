@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "check": "node scripts/validate.mjs",
-    "test": "npm run check",
+    "test": "node --test scripts/validate.test.mjs",
     "package:smoke": "node scripts/package-smoke.mjs",
-    "release:check": "npm run check && npm run package:smoke"
+    "release:check": "npm run check && npm test && npm run package:smoke"
   },
   "keywords": [
     "job-search",
