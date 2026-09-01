@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const requiredFiles = [
   'README.md',
+  'package.json',
   'SKILL.md',
   'LICENSE',
   'SECURITY.md',
@@ -29,34 +30,72 @@ const untrackedArtifactPatterns = [
   /(^|\/)\.DS_Store$/
 ];
 
-const readme = fs.readFileSync('README.md', 'utf8');
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const errors = [];
 
-for (const path of requiredFiles) {
-  if (!fs.existsSync(path) || fs.statSync(path).size === 0) {
-    errors.push(`${path} is missing or empty`);
+function readRequiredFile(path) {
+  try {
+    const content = fs.readFileSync(path, 'utf8');
+    if (content.length === 0) {
+      errors.push(`${path} is missing or empty`);
+      return null;
+    }
+    return content;
+  } catch {
+    errors.push(`${path} is missing or unreadable`);
+    return null;
   }
 }
 
-for (const phrase of requiredReadmePhrases) {
-  if (!readme.includes(phrase)) errors.push(`README.md missing ${phrase}`);
+const contentInputs = new Set([
+  'README.md',
+  'package.json',
+  'fixtures/sample-resume.md',
+  'fixtures/sample-job-posting.md'
+]);
+const contents = new Map();
+
+for (const path of requiredFiles) {
+  if (contentInputs.has(path)) {
+    contents.set(path, readRequiredFile(path));
+    continue;
+  }
+  try {
+    if (fs.statSync(path).size === 0) errors.push(`${path} is missing or empty`);
+  } catch {
+    errors.push(`${path} is missing or unreadable`);
+  }
 }
 
-const fixtureText = [
-  fs.readFileSync('fixtures/sample-resume.md', 'utf8'),
-  fs.readFileSync('fixtures/sample-job-posting.md', 'utf8')
-].join('\n');
+const readme = contents.get('README.md');
+if (readme !== null) {
+  for (const phrase of requiredReadmePhrases) {
+    if (!readme.includes(phrase)) errors.push(`README.md missing ${phrase}`);
+  }
+}
 
-if (!fixtureText.includes('synthetic') && !fixtureText.includes('Synthetic')) {
+const fixtureParts = [contents.get('fixtures/sample-resume.md'), contents.get('fixtures/sample-job-posting.md')];
+const fixtureText = fixtureParts.every((content) => content !== null) ? fixtureParts.join('\n') : null;
+
+if (fixtureText !== null && !fixtureText.includes('synthetic') && !fixtureText.includes('Synthetic')) {
   errors.push('fixtures must be clearly marked synthetic');
 }
-if (pkg.private !== true) errors.push('package.json must stay private until publish intent is explicit');
-if (pkg.repository?.url !== 'git+https://github.com/rogerchappel/job-search-skill.git') {
-  errors.push('package.json repository URL is incorrect');
+let pkg = null;
+const packageText = contents.get('package.json');
+if (packageText !== null) {
+  try {
+    pkg = JSON.parse(packageText);
+  } catch {
+    errors.push('package.json contains invalid JSON');
+  }
 }
-if (!pkg.scripts?.['release:check']) errors.push('package.json missing release:check script');
-if (!pkg.scripts?.['package:smoke']) errors.push('package.json missing package:smoke script');
+if (pkg !== null) {
+  if (pkg.private !== true) errors.push('package.json must stay private until publish intent is explicit');
+  if (pkg.repository?.url !== 'git+https://github.com/rogerchappel/job-search-skill.git') {
+    errors.push('package.json repository URL is incorrect');
+  }
+  if (!pkg.scripts?.['release:check']) errors.push('package.json missing release:check script');
+  if (!pkg.scripts?.['package:smoke']) errors.push('package.json missing package:smoke script');
+}
 
 const inWorkTree = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], { encoding: 'utf8' });
 if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true') {
