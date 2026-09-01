@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make the documented fresh-checkout setup compatible with artifact hygiene.
+- Report missing or unreadable validation inputs without Node.js stack traces.
 - Fail `release:check` when install artifacts are left untracked.
 - Add `.gitignore` for `node_modules/`, `package-lock.json`, `coverage/`,
   `dist/`, log files, and `.DS_Store`.

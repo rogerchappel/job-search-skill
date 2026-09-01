@@ -14,7 +14,7 @@ customize the target-role inputs, and run the release check before sharing
 changes:
 
 ```sh
-npm install
+npm install --package-lock=false
 npm run release:check
 ```
 
@@ -75,8 +75,9 @@ sections visible, package metadata points to this public repository, synthetic
 fixtures are present, and `npm pack --dry-run` includes the expected skill,
 fixture, docs, and support files. It also inspects ignored and untracked files
 and fails whenever prohibited local artifacts (`node_modules/`,
-`package-lock.json`, `coverage/`, `dist/`, `*.log`, or `.DS_Store`) exist. Run
-the check from a clean checkout without generating those artifacts first.
+`package-lock.json`, `coverage/`, `dist/`, `*.log`, or `.DS_Store`) exist. This
+zero-dependency package does not commit a lockfile, so use the setup command
+above to prevent npm from generating one before the release check.
 
 ## Release Checklist
 
