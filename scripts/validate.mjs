@@ -20,8 +20,8 @@ const requiredReadmePhrases = [
   '## Release check'
 ];
 
-// Local artifacts that must never be committed; matches .gitignore exactly.
-const untrackedArtifactPatterns = [
+// Local artifacts that must never be present; matches .gitignore exactly.
+const prohibitedArtifactPatterns = [
   /(^|\/)node_modules(\/|$)/,
   /(^|\/)package-lock\.json$/,
   /(^|\/)coverage(\/|$)/,
@@ -99,23 +99,24 @@ if (pkg !== null) {
 
 const inWorkTree = spawnSync('git', ['rev-parse', '--is-inside-work-tree'], { encoding: 'utf8' });
 if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true') {
-  const status = spawnSync('git', ['status', '--porcelain', '--ignored', '--untracked-files=all'], { encoding: 'utf8' });
-  if (status.status !== 0) {
-    errors.push('git status --porcelain failed; install-artifact hygiene cannot be verified');
+  const inventories = [
+    ['--cached'],
+    ['--others', '--exclude-standard'],
+    ['--others', '--ignored', '--exclude-standard']
+  ].map((args) => spawnSync('git', ['ls-files', '-z', ...args], { encoding: 'utf8' }));
+  if (inventories.some((result) => result.status !== 0)) {
+    errors.push('git ls-files failed; install-artifact hygiene cannot be verified');
   } else {
-    const untrackedArtifacts = String(status.stdout || '')
-      .split('\n')
-      .map((line) => line.trim())
+    const prohibitedArtifacts = [...new Set(inventories.flatMap((result) => String(result.stdout || '').split('\0')))]
       .filter(Boolean)
-      .filter((line) => line.startsWith('?? ') || line.startsWith('!! '))
-      .map((line) => line.slice(3))
-      .filter((path) => untrackedArtifactPatterns.some((pattern) => pattern.test(path)));
-    if (untrackedArtifacts.length) {
-      errors.push(`prohibited local artifacts are present: ${untrackedArtifacts.join(', ')}`);
+      .filter((path) => prohibitedArtifactPatterns.some((pattern) => pattern.test(path)))
+      .sort();
+    if (prohibitedArtifacts.length) {
+      errors.push(`prohibited local artifacts are present: ${prohibitedArtifacts.join(', ')}`);
     }
   }
 } else {
-  console.log('Not inside a git work tree; skipping untracked-artifact hygiene check.');
+  console.log('Not inside a git work tree; skipping artifact hygiene check.');
 }
 
 if (errors.length) {
