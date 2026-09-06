@@ -87,3 +87,25 @@ for (const [artifact, expected] of artifacts) {
     assert.match(result.stderr, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   });
 }
+
+for (const state of ['tracked', 'staged']) {
+  test(`rejects a prohibited ${state} artifact`, (t) => {
+    const directory = fixture();
+    t.after(() => rmSync(directory, { recursive: true, force: true }));
+    writeFileSync(path.join(directory, 'debug.log'), 'probe\n');
+
+    const git = spawnSync('git', ['add', '--force', 'debug.log'], { cwd: directory, encoding: 'utf8' });
+    assert.equal(git.status, 0, git.stderr);
+    if (state === 'tracked') {
+      const commit = spawnSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.com', 'commit', '--quiet', '-m', 'fixture'], {
+        cwd: directory,
+        encoding: 'utf8'
+      });
+      assert.equal(commit.status, 0, commit.stderr);
+    }
+
+    const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+    assert.equal(result.status, 1, result.stdout);
+    assert.match(result.stderr, /prohibited local artifacts are present: debug\.log/);
+  });
+}

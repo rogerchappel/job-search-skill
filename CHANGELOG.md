@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reject prohibited release artifacts whether tracked, staged, untracked, or
+  ignored.
 - Make the documented fresh-checkout setup compatible with artifact hygiene.
 - Report missing or unreadable validation inputs without Node.js stack traces.
 - Fail `release:check` when install artifacts are left untracked.
