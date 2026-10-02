@@ -76,7 +76,7 @@ if (readme !== null) {
 const fixtureParts = [contents.get('fixtures/sample-resume.md'), contents.get('fixtures/sample-job-posting.md')];
 const fixtureText = fixtureParts.every((content) => content !== null) ? fixtureParts.join('\n') : null;
 
-if (fixtureText !== null && !fixtureText.includes('synthetic') && !fixtureText.includes('Synthetic')) {
+if (fixtureText !== null && !fixtureText.toLowerCase().includes('synthetic')) {
   errors.push('fixtures must be clearly marked synthetic');
 }
 let pkg = null;
