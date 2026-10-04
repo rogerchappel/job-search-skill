@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { chmodSync, cpSync, mkdtempSync, mkdirSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, cpSync, mkdtempSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -27,6 +27,33 @@ function fixture() {
   assert.equal(git(['add', '.']).status, 0);
   return directory;
 }
+
+test('accepts synthetic fixture labels regardless of case', (t) => {
+  const directory = fixture();
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const resume = path.join(directory, 'fixtures', 'sample-resume.md');
+  const posting = path.join(directory, 'fixtures', 'sample-job-posting.md');
+  const resumeText = readFileSync(resume, 'utf8');
+  const postingText = readFileSync(posting, 'utf8');
+  writeFileSync(resume, resumeText.replace(/synthetic/gi, 'SYNTHETIC'));
+  writeFileSync(posting, postingText.replace(/synthetic/gi, 'sYnThEtIc'));
+
+  const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('rejects fixtures without a synthetic label', (t) => {
+  const directory = fixture();
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  for (const name of ['sample-resume.md', 'sample-job-posting.md']) {
+    const target = path.join(directory, 'fixtures', name);
+    const text = readFileSync(target, 'utf8');
+    writeFileSync(target, text.replace(/synthetic/gi, 'example'));
+  }
+  const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stderr, /fixtures must be clearly marked synthetic/);
+});
 
 test('accepts a clean isolated checkout', (t) => {
   const directory = fixture();
