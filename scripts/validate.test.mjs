@@ -76,6 +76,17 @@ test('documented fresh-checkout setup passes the release check', { skip: process
   assert.equal(release.status, 0, release.stderr);
 });
 
+test('reports malformed package.json without a stack trace', (t) => {
+  const directory = fixture();
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  writeFileSync(path.join(directory, 'package.json'), '{ malformed json');
+
+  const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stderr, /^- package\.json contains invalid JSON$/m);
+  assert.doesNotMatch(result.stderr, /(?:SyntaxError|JSON\.parse|validate\.mjs:\d+)/);
+});
+
 for (const requiredFile of ['README.md', 'package.json']) {
   test(`reports a missing ${requiredFile} without a stack trace`, (t) => {
     const directory = fixture();
