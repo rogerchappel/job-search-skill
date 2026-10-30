@@ -62,7 +62,7 @@ test('accepts a clean isolated checkout', (t) => {
   assert.equal(result.status, 0, result.stderr);
 });
 
-test('documented fresh-checkout setup passes the release check', { skip: process.env.JOB_SEARCH_SETUP_CHILD === '1' }, (t) => {
+test('documented fresh-checkout setup passes the release check', { skip: process.env.JOB_SEARCH_SETUP_INTEGRATION !== '1' || process.env.JOB_SEARCH_SETUP_CHILD === '1' }, (t) => {
   const directory = fixture();
   t.after(() => rmSync(directory, { recursive: true, force: true }));
 
