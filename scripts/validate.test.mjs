@@ -111,6 +111,29 @@ test('reports an unreadable required input without a stack trace', { skip: proce
   assert.doesNotMatch(result.stderr, /(?:Error: EACCES|node:fs|validate\.mjs:\d+)/);
 });
 
+for (const args of [
+  ['ls-files', '-z', '--cached'],
+  ['ls-files', '-z', '--others', '--exclude-standard'],
+  ['ls-files', '-z', '--others', '--ignored', '--exclude-standard']
+]) {
+  test(`reports failed git ${args.slice(1).join(' ')} inventory without a stack trace`, (t) => {
+    const directory = fixture();
+    t.after(() => rmSync(directory, { recursive: true, force: true }));
+    const git = path.join(directory, '.git');
+    rmSync(git, { recursive: true, force: true });
+    mkdirSync(path.join(git, 'refs'), { recursive: true });
+    mkdirSync(path.join(git, 'objects'), { recursive: true });
+    writeFileSync(path.join(git, 'HEAD'), 'ref: refs/heads/main\n');
+    writeFileSync(path.join(git, 'config'), '[core]\n\trepositoryformatversion = 0\n\tbare = false\n');
+    writeFileSync(path.join(git, 'index'), 'not a git index');
+
+    const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+    assert.equal(result.status, 1, result.stdout);
+    assert.match(result.stderr, /^- git ls-files failed; install-artifact hygiene cannot be verified$/m);
+    assert.doesNotMatch(result.stderr, /(?:Error:|node:child_process|validate\.mjs:\d+)/);
+  });
+}
+
 for (const [artifact, expected] of artifacts) {
   test(`rejects ignored artifact ${artifact}`, (t) => {
     const directory = fixture();
