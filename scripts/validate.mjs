@@ -102,7 +102,7 @@ if (inWorkTree.status === 0 && String(inWorkTree.stdout || '').trim() === 'true'
   const inventories = [
     ['--cached'],
     ['--others', '--exclude-standard'],
-    ['--others', '--ignored', '--exclude-standard']
+    ['--others', '--ignored', '--exclude-standard', '--', '.']
   ].map((args) => spawnSync('git', ['ls-files', '-z', ...args], { encoding: 'utf8' }));
   if (inventories.some((result) => result.status !== 0)) {
     errors.push('git ls-files failed; install-artifact hygiene cannot be verified');

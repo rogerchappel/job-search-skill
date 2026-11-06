@@ -114,7 +114,7 @@ test('reports an unreadable required input without a stack trace', { skip: proce
 for (const args of [
   ['ls-files', '-z', '--cached'],
   ['ls-files', '-z', '--others', '--exclude-standard'],
-  ['ls-files', '-z', '--others', '--ignored', '--exclude-standard']
+  ['ls-files', '-z', '--others', '--ignored', '--exclude-standard', '--', '.']
 ]) {
   test(`reports failed git ${args.slice(1).join(' ')} inventory without a stack trace`, (t) => {
     const directory = fixture();
