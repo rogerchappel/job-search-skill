@@ -14,6 +14,8 @@ const artifacts = [
   ['coverage/probe.txt', 'coverage/probe.txt'],
   ['dist/probe.txt', 'dist/probe.txt'],
   ['debug.log', 'debug.log'],
+  ['debug.log.old', 'debug.log.old'],
+  ['logs/debug.log.1', 'logs/debug.log.1'],
   ['.DS_Store', '.DS_Store']
 ];
 
