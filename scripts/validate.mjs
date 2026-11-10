@@ -26,7 +26,7 @@ const prohibitedArtifactPatterns = [
   /(^|\/)package-lock\.json$/,
   /(^|\/)coverage(\/|$)/,
   /(^|\/)dist(\/|$)/,
-  /\.log$/,
+  /\.log(?:\.|$)/,
   /(^|\/)\.DS_Store$/
 ];
 
