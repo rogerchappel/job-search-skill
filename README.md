@@ -6,6 +6,17 @@ This repository is a lightweight skill package, not an application. Its value is
 the workflow text an agent can load when helping a job seeker research roles,
 adapt application materials, and track follow-up without inventing facts.
 
+## Package and publication status
+
+This repository is a public source for a reusable job-search assistant skill,
+but the npm package is intentionally marked `"private": true` in
+[`package.json`](package.json). It is not publishable to the npm registry, and
+`npm pack --dry-run` is only a local packaging-integrity check—not a publication
+or release step. Consumers should copy the skill files from this repository;
+there is currently no supported registry installation path. Do not remove the
+private flag unless registry publication has been explicitly approved and the
+package's distribution and privacy implications have been reviewed.
+
 ## Usage
 
 Use this repo as the public source for a job-search assistant skill. A typical
@@ -85,7 +96,7 @@ above to prevent npm from generating one before the release check.
 - Keep examples based on synthetic job posts and candidate notes.
 - Document every external action as a human-approved step.
 - Run `npm run release:check` before opening a release-readiness PR.
-- Review `npm run package:smoke` output before publishing any npm package.
+- Review `npm run package:smoke` output for local package integrity. This repository is private on npm; do not publish it.
 
 ## Safety Notes
 
