@@ -24,11 +24,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Run tests
-        run: npm test
-
-      - name: Run validator check
-        run: npm run check
-
-      - name: Run package smoke check
-        run: npm run package:smoke
+      - name: Run complete fresh-checkout release check
+        run: npm run release:check
