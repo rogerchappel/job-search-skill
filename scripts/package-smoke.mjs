@@ -28,4 +28,4 @@ for (const path of required) {
 }
 
 console.log(output.trim());
-console.log('job-search-skill package smoke ok');
+console.log('job-search-skill package smoke ok (private package; dry-run only, no archive or publication)');

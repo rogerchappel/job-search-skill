@@ -8,12 +8,16 @@ adapt application materials, and track follow-up without inventing facts.
 
 ## Package and publication status
 
-This repository is a public source for a reusable job-search assistant skill,
-but the npm package is intentionally marked `"private": true` in
-[`package.json`](package.json). It is not publishable to the npm registry, and
-`npm pack --dry-run` is only a local packaging-integrity check—not a publication
-or release step. Consumers should copy the skill files from this repository;
-there is currently no supported registry installation path. Do not remove the
+This repository is a public source for a reusable job-search assistant skill.
+The `package.json` metadata and `files` allowlist define what the local archive
+check would contain, but the npm package is intentionally marked
+`"private": true` in [`package.json`](package.json). It is not publishable to the npm registry, and
+`npm run package:smoke` runs `npm pack --dry-run` and checks the expected
+archive contents on a fresh checkout. It is only a local packaging-integrity
+check—not a publication or release step. The smoke test creates no distributable
+archive because it uses npm’s dry-run mode. Consumers should copy the skill
+files from this repository; there is currently no supported registry
+installation path. Do not remove the
 private flag unless registry publication has been explicitly approved and the
 package's distribution and privacy implications have been reviewed.
 
@@ -96,7 +100,9 @@ above to prevent npm from generating one before the release check.
 - Keep examples based on synthetic job posts and candidate notes.
 - Document every external action as a human-approved step.
 - Run `npm run release:check` before opening a release-readiness PR.
-- Review `npm run package:smoke` output for local package integrity. This repository is private on npm; do not publish it.
+- Review `npm run package:smoke` output for local package integrity. The package
+  is marked private on npm; do not publish it. `package:smoke` is strictly a
+  local dry-run check and does not publish or create a tarball.
 
 ## Safety Notes
 
