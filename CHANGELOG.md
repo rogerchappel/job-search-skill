@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Clarify that package smoke validates the private package archive contents in
+  dry-run mode only; it does not create or publish a distributable archive.
+
 - Reject prohibited release artifacts whether tracked, staged, untracked, or
   ignored.
 - Make the documented fresh-checkout setup compatible with artifact hygiene.
