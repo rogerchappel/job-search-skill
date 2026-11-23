@@ -89,6 +89,17 @@ test('reports malformed package.json without a stack trace', (t) => {
   assert.doesNotMatch(result.stderr, /(?:SyntaxError|JSON\.parse|validate\.mjs:\d+)/);
 });
 
+test('reports a missing required job-posting fixture without a stack trace', (t) => {
+  const directory = fixture();
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  unlinkSync(path.join(directory, 'fixtures', 'sample-job-posting.md'));
+
+  const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stderr, /^- fixtures\/sample-job-posting\.md is missing or unreadable$/m);
+  assert.doesNotMatch(result.stderr, /(?:Error: ENOENT|node:fs|validate\.mjs:\d+)/);
+});
+
 for (const requiredFile of ['README.md', 'package.json']) {
   test(`reports a missing ${requiredFile} without a stack trace`, (t) => {
     const directory = fixture();
