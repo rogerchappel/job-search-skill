@@ -57,6 +57,18 @@ test('rejects fixtures without a synthetic label', (t) => {
   assert.match(result.stderr, /fixtures must be clearly marked synthetic/);
 });
 
+test('skips git artifact inventory outside a worktree while retaining artifact checks', (t) => {
+  const directory = fixture();
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  rmSync(path.join(directory, '.git'), { recursive: true, force: true });
+  writeFileSync(path.join(directory, 'debug.log'), 'local artifact\n');
+
+  const result = spawnSync(process.execPath, [validator], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Not inside a git work tree; skipping artifact hygiene check\./);
+  assert.match(result.stdout, /job-search-skill release checks passed/);
+});
+
 test('accepts a clean isolated checkout', (t) => {
   const directory = fixture();
   t.after(() => rmSync(directory, { recursive: true, force: true }));
